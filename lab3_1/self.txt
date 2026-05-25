@@ -1,0 +1,14 @@
+Grammar, Axiom, Rules, NtList, NtListTail, NtItem, Rule, AltList, MoreAlts, Alternative, SymbolSeq, SymbolSeqRest, Symbol, { Grammar }
+< Grammar : Axiom Rules >
+< Axiom : NtList >
+< NtList : NtItem NtListTail >
+< NtListTail : "," NtItem NtListTail : @ >
+< NtItem : IDENT : "{" IDENT "}" >
+< Rules : Rule Rules : @ >
+< Rule : "<" IDENT ":" AltList ">" >
+< AltList : Alternative MoreAlts >
+< MoreAlts : ":" Alternative MoreAlts : @ >
+< Alternative : SymbolSeq : "@" >
+< SymbolSeq : Symbol SymbolSeqRest >
+< SymbolSeqRest : Symbol SymbolSeqRest : @ >
+< Symbol : IDENT : STRING >
