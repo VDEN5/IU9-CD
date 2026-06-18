@@ -3,7 +3,8 @@
 % Денис Воронов, ИУ9-62Б
 
 # Цель работы
-Целью данной работы является ознакомление с раскруткой самоприменимых компиляторов на примере модельного компилятора.
+Целью данной работы является ознакомление с раскруткой самоприменимых
+компиляторов на примере модельного компилятора.
 
 # Индивидуальный вариант
 Компилятор P5. Заменить запись операции <> на !=.
@@ -29,7 +30,6 @@
           until iscmte or (ch = ')') or eof(input);
           if not iscmte then nextch; goto 1
         end;
-+       { ------- ВСТАВИТЬ ЭТОТ БЛОК ------- }
 +      chbang:
 +        begin 
 +          nextch; 
@@ -46,7 +46,6 @@
 +              op := noop
 +            end
 +        end;
-+      { ---------------------------------- }
        special:
          begin sy := ssy[ch]; op := sop[ch];
            nextch
@@ -70,7 +69,7 @@
        chartp['<'] := chlt    ; chartp['>'] := chgt    ;
        chartp['{'] := chlcmt  ; chartp['}'] := special ;
        chartp['@'] := special ;
-+      chartp['!'] := chbang;   { <--- ВСТАВИТЬ ЭТУ СТРОКУ }
++      chartp['!'] := chbang;
  
        ordint['0'] := 0; ordint['1'] := 1; ordint['2'] := 2;
        ordint['3'] := 3; ordint['4'] := 4; ordint['5'] := 5;
@@ -87,11 +86,41 @@
 ```diff
 --- pcom2.pas	2026-02-11 17:17:21.091325183 +0300
 +++ pcom3.pas	2026-02-11 20:10:07.608100535 +0300
-@@ -4101,7 +4101,6 @@
+@@ -1400,7 +1400,7 @@
+     comptypes := false; { set default is false }
+     { Check equal. Aliases of the same type will also be equal. }
+-    if fsp1 <> fsp2 then comptypes := true
++    if fsp1 != fsp2 then comptypes := true
+     else
+       if (fsp1 <> nil) and (fsp2 <> nil) then
+         if fsp1^.form = fsp2^.form then
+@@ -1600,7 +1600,7 @@
+   label 1;
+ begin
+-  while fcp <> nil do
++  while fcp != nil do
+     if strequvf(fcp^.name, id) then goto 1
+     else if strltnvf(fcp^.name, id) then fcp := fcp^.rlink
+       else fcp := fcp^.llink;
+@@ -1620,7 +1620,7 @@
+-        while lcp <> nil do begin
++        while lcp != nil do begin
+           if strequvf(lcp^.name, id) then
+             if lcp^.klass in fidcls then begin disx := disxl; goto 1 end
+             else
+@@ -1640,7 +1640,7 @@
+     searchidne(fidcls, lcp); { perform no error search }
+-    if lcp <> nil then goto 1; { found }
++    if lcp != nil then goto 1; { found }
+     (*search not successful
+      --> procedure simpletype*)
+       error(104);
+@@ -4101,7 +4101,7 @@
                              begin call(fsys,lcp);
                                with gattr do
                                  begin kind := expr;
 -                                  if typtr <> nil then
++                                  if typtr != nil then
                                      if typtr^.form=subrange then
                                        typtr := typtr^.rangetype
                                  end
@@ -120,32 +149,12 @@ end.
 Вывод тестового примера на `stdout`
 
 ```
-P5 Pascal interpreter vs. 1.0
-
-Assembling/loading program
-Running program
-
-P5 Pascal compiler vs. 1.0
-
-
-     1       40 program TestNE(output); 
-     2       40 begin 
-     3        3   if 1 != 2 then 
-     4        9     writeln('OK: 1 != 2 works') 
-     5       15   else 
-     6       18     writeln('FAIL'); 
-     7       26    
-     8       26   if 2 != 2 then 
-     9       30     writeln('FAIL') 
-    10       36   else 
-    11       39     writeln('OK: 2 != 2 is false') 
-    12       45 end. 
-
-Errors in program: 0
-
-program complete
-
+OK: 1 != 2 works
+OK: 2 != 2 is false
 ```
 
 # Вывод
-Сумел быстро изменить исходный код компиляторы на несколько тысяч строк кода. Напомнило лабораторные по операционным системам, где тоже требовалось в целой кодовой базе вставить несколько нужных строк кода. Но непосредственно здесь также сверх описанного сумел раскрутить исходный компилятор.
+Сумел быстро изменить исходный код компилятора на несколько тысяч строк кода.
+Напомнило лабораторные по операционным системам, где тоже требовалось в целой кодовой базе
+вставить несколько нужных строк кода. Но непосредственно здесь также сверх описанного сумел
+раскрутить исходный компилятор.
